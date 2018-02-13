@@ -1,0 +1,9 @@
+node_modules
+.vscode
+.sass-cache
+dist
+temporary
+release.sh
+.vscode
+logs
+test
