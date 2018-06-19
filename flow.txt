@@ -1,0 +1,21 @@
+这两天想做一些版本发布方面的脚本工作，目的主要有两个：
+
+1. 保证每次发布都有相应的版本对应(在我们将frontend/backend统一放在一个工程后，这个版本应该是指向此工程而不是6web的，也是为了保证系统能快速的回滚)
+2. 针对凤彬提到的release log，希望用自动化的方式增加本次版本发布相关的log
+
+开发的时候自行checkout feature分支，在完成后merge到develop，master分支只能存在线上已经发布的代码，除了这些常规的要求以外，在参考了crawler team的一些做法后，总结一下我们自己的发布流程大致如下：
+
+1. 确定需要发布的feature已经本地测试通过后将其merge到develop分支并push，然后checkout出一个release分支，分支名称形如release-v1.0.0(主要目的是冻结feature，其他人依然可以往develop提交)
+2. 在此分支上使用deploy_xxx.sh脚本做常规的docker image build and push操作
+3. 使用新push的docker image发布线上程序，如果发布成功则步骤4，否则则步骤5
+4. 使用tag.sh结合分支的版本号(release-v1.0.0)给此次发布打tag，同时将相应的log增加至release.log文件，之后将该分支merge到master和develop，同时push相应分支和tag
+5. 在发布分支(release-v1.0.0)做相应的bug fix工作，本地测试成功以后回到步骤2
+
+综上，我们会有两个发布脚本deploy.sh和tag.sh，在引入正式的集成测试之前，这两步需要分别手工完成，不能放在一个脚本里
+
+步骤4中的tag.sh作用有两个，一个是将没有问题的线上代码merge到master分支，另一个是将相应的log增加至release.log
+为了保证这一步的自动化，我们希望在commit message里面可以直接提取log，主要工作就是提取当前commit和上次release tag之间的所有commit message，将符合一定格式的message都作为有效信息，为此需要规定commit message的格式如下：
+
+1. 对于主工程，提取形如$PART/$ACTION: XXX形式的message，其中$PART可以取值(frontend, nginx, node)，$ACTION可以取值(feature, improve, fix), XXX即为有效信息
+2. 由于所有的web工程都引入了6web作为submodule，为了区分6web内不同的module，需要保证6web的commit message符合$MODULE/$ACTION: XXX的形式，其中module必须需要跟tag.sh指定的module名称一致，例如trofi，$ACTION如1中所示
+
