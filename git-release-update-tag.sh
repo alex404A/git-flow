@@ -1,5 +1,12 @@
 #!/bin/bash
 
+read 'flag?Please input flag to filter:'
+git tag | grep $flag
+read 'tag?Please input existing tag to point to new commit:'
+if [ "$(git tag | grep -cx $tag)" -eq "0" ]; then
+  echo project tag does not exist
+  exit 1
+fi
 RAW_PATH=$PWD
 LOG_PATH=/home/sixestates/script/git-flow/logs
 mkdir -p $LOG_PATH
@@ -7,12 +14,14 @@ LOG_FILE=$LOG_PATH/git-flow-$(date +%Y%m%d-%H%M-%S-%N).log
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] >>>>>>>>>> ready to release code in master" | tee -a $LOG_FILE
 BASE_PATH=/home/sixestates/6estates/6web
 cd $BASE_PATH
-git checkout local | tee -a $LOG_FILE
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+git checkout $CURRENT_BRANCH | tee -a $LOG_FILE
 git stash  | tee -a $LOG_FILE
 git checkout develop | tee -a $LOG_FILE
 git fetch | tee -a $LOG_FILE
 git merge | tee -a $LOG_FILE
-git checkout local | tee -a $LOG_FILE
+git checkout $CURRENT_BRANCH | tee -a $LOG_FILE
 git merge develop
 out=$?
 if [ $out -ne 0 ];then
@@ -20,7 +29,7 @@ if [ $out -ne 0 ];then
   return
 fi
 git checkout develop | tee -a $LOG_FILE
-git merge local
+git merge $CURRENT_BRANCH
 out=$?
 if [ $out -ne 0 ];then
   echo merge failed
@@ -38,7 +47,6 @@ if [ $out -ne 0 ];then
 fi
 git push | tee -a $LOG_FILE
 git tag
-read -p 'Please input existing tag to point to new commit:' tag
 git push origin :refs/tags/$tag
 git tag -f $tag
 git push origin master $tag
@@ -53,7 +61,7 @@ git push origin master $tag | tee -a $LOG_FILE
 git checkout develop | tee -a $LOG_FILE
 git merge master | tee -a $LOG_FILE
 git push | tee -a $LOG_FILE
-git checkout local | tee -a $LOG_FILE
+git checkout $CURRENT_BRANCH | tee -a $LOG_FILE
 git merge develop | tee -a $LOG_FILE
 git stash apply | tee -a $LOG_FILE
 cd $RAW_PATH
