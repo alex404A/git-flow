@@ -1,4 +1,5 @@
 #!/bin/bash
+
 image_version=$(git describe --tags)
 code_version=$(python maintain-version-number.py)
 echo building... code_version:$code_version  image_version:$image_version
