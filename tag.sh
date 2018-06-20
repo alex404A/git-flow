@@ -13,8 +13,8 @@ if [[ -z "$version" ]]; then
 fi
 echo 'gen release.log'
 echo "--$version" > doc/release.log.tmp
-echo $latest_branch
-echo $current_branch
+echo latest_branch $latest_branch
+echo current_branch $current_branch
 git log $latest_branch...$current_branch --grep "\[+\]" --pretty=format:'%B' >> doc/release.log.tmp
 git log $latest_branch...$current_branch --grep "\[-\]" --pretty=format:'%B' >> doc/release.log.tmp
 git log $latest_branch...$current_branch --grep "\[!\]" --pretty=format:'%B' >> doc/release.log.tmp
@@ -47,8 +47,8 @@ echo 'commit release.log'
 git stage doc/release.log
 git commit -m 'gen release.log'
 echo tag $version
-existed_tag=$(git tag | grep $version)
-if [[ -z "existed_tag" ]]; then
+existed_tag=$(git tag | grep "$version")
+if [[ -z "$existed_tag" ]]; then
   git tag $version
 else
   git push origin :refs/tags/$version
