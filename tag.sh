@@ -13,6 +13,8 @@ if [[ -z "$version" ]]; then
 fi
 echo 'gen release.log'
 echo "--$version" > doc/release.log.tmp
+echo latest_branch $latest_branch
+echo current_branch $current_branch
 git log $latest_branch...$current_branch --grep '[+]' --pretty=format:'%B' >> doc/release.log.tmp
 git log $latest_branch...$current_branch --grep '[-]' --pretty=format:'%B' >> doc/release.log.tmp
 git log $latest_branch...$current_branch --grep '[!]' --pretty=format:'%B' >> doc/release.log.tmp
@@ -33,7 +35,7 @@ else
 fi
 cd $project_dir
 
-if [[ $(cat doc/release.log | grep "^--$version") ]]; then
+if [[ $(cat doc/release.log | grep "--$version") ]]; then
   sed -i "/--$version/d" doc/release.log
 else
   "\n" >> doc/release.log.tmp
