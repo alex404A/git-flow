@@ -1,0 +1,3 @@
+[submodule "6web"]
+	path = 6web
+	url = git@bitbucket.org:6estates/6web.git
