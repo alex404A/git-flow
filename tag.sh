@@ -13,10 +13,10 @@ if [[ -z "$version" ]]; then
 fi
 echo 'gen release.log'
 echo "--$version" > doc/release.log.tmp
-git log $latest_branch...$current_branch --grep "^[+]" --pretty=format:'%B' >> doc/release.log.tmp
-git log $latest_branch...$current_branch --grep "^[-]" --pretty=format:'%B' >> doc/release.log.tmp
-git log $latest_branch...$current_branch --grep "^[!]" --pretty=format:'%B' >> doc/release.log.tmp
-git log $latest_branch...$current_branch --grep "^[*]" --pretty=format:'%B' >> doc/release.log.tmp
+git log $latest_branch...$current_branch --grep "^\[+\]" --pretty=format:'%B' >> doc/release.log.tmp
+git log $latest_branch...$current_branch --grep "^\[-\]" --pretty=format:'%B' >> doc/release.log.tmp
+git log $latest_branch...$current_branch --grep "^\[!\]" --pretty=format:'%B' >> doc/release.log.tmp
+git log $latest_branch...$current_branch --grep "^\[*\]" --pretty=format:'%B' >> doc/release.log.tmp
 
 cd ./6web
 submodule_latest_branch=$(git tag | grep -Po "^$project_name-v\d+\.\d+\.\d+" | tail -1)
@@ -26,10 +26,10 @@ echo 6web second latest tag $submodule_second_latest_branch
 if [[ -z "$submodule_latest_branch" ]] || [[ -z "$submodule_second_latest_branch" ]]; then
   echo no proper tag found in 6web
 else
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[+]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[-]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[!]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[*]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name\[+\]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name\[-\]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name\[!\]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name\[*\]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
 fi
 cd $project_dir
 
