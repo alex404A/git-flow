@@ -54,6 +54,7 @@ else
   git push origin :refs/tags/$version
   git tag -f $version
 fi
+git push origin $current_branch
 git checkout master && git merge $current_branch
 git push
 git push --tags
