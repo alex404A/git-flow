@@ -35,7 +35,7 @@ else
 fi
 cd $project_dir
 
-if [[ $(cat doc/release.log | grep "--$version") ]]; then
+if [[ $(cat doc/release.log | grep -- "--$version") ]]; then
   sed -i "/--$version/d" doc/release.log
 else
   "\n" >> doc/release.log.tmp
