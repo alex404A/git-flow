@@ -13,8 +13,8 @@ if [[ -z "$version" ]]; then
 fi
 echo 'gen release.log'
 echo "--$version" > doc/release.log.tmp
-echo latest_branch $latest_branch
-echo current_branch $current_branch
+echo $latest_branch
+echo $current_branch
 git log $latest_branch...$current_branch --grep '[+]' --pretty=format:'%B' >> doc/release.log.tmp
 git log $latest_branch...$current_branch --grep '[-]' --pretty=format:'%B' >> doc/release.log.tmp
 git log $latest_branch...$current_branch --grep '[!]' --pretty=format:'%B' >> doc/release.log.tmp
