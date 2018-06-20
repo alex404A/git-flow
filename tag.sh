@@ -21,15 +21,15 @@ git log $latest_branch...$current_branch --grep "^[*]" --pretty=format:'%B' >> d
 cd ./6web
 submodule_latest_branch=$(git tag | grep -Po "^$project_name-v\d+\.\d+\.\d+" | tail -1)
 submodule_second_latest_branch=$(git tag | grep -Po "^$project_name-v\d+\.\d+\.\d+" | tail -2 | head -1)
-echo $submodule_latest_branch
-echo $submodule_second_latest_branch
+echo 6web latest tag $submodule_latest_branch
+echo 6web second latest tag $submodule_second_latest_branch
 if [[ -z "$submodule_latest_branch" ]] || [[ -z "$submodule_second_latest_branch" ]]; then
   echo no proper tag found in 6web
 else
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[+]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[-]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[!]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
-  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[*]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[+]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[-]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[!]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[*]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
 fi
 cd $project_dir
 
