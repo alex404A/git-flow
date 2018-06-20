@@ -1,3 +1,7 @@
+--v1.2.6
+cmi[+] update tag.sh
+backend[+] update README.md
+
 --v1.2.5
 [*] fix nonexistent tag issue
 
