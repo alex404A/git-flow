@@ -1,5 +1,5 @@
 #!/bin/bash
-project_name=cmi
+project_name="cmi"
 project_dir=$(pwd)
 latest_branch=$(git tag | grep -Po 'v\d+\.\d+\.\d+' | tail -1)
 current_branch=$(git branch | sed -n '/\*/p' | cut -d ' ' -f 2)
