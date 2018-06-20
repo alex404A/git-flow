@@ -38,7 +38,7 @@ cd $project_dir
 if [[ $(cat doc/release.log | grep -- "--$version") ]]; then
   sed -i "/--$version/d" doc/release.log
 else
-  echo -n \n >> doc/release.log.tmp
+  echo "" >> doc/release.log.tmp
 fi
 
 cat doc/release.log.tmp doc/release.log > doc/release.log.new
