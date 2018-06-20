@@ -1,7 +1,9 @@
 --v1.2.2
 [*] fix new line issue
-\n--v1.2.1
+
+--v1.2.1
 [!] update flow.txt
+
 --v1.2.0
 [+] push release branch
 [+] update tag.sh again and again
@@ -16,6 +18,6 @@
 --v1.1.0
 
 --v1.0.1
-Fix: update
+[!] update
 
 --v1.0.0
