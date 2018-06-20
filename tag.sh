@@ -1,5 +1,5 @@
 #!/bin/bash
-prject_name=cmi
+project_name=cmi
 project_dir=$(pwd)
 latest_branch=$(git tag | grep -Po 'v\d+\.\d+\.\d+' | tail -1)
 current_branch=$(git branch | sed -n '/\*/p' | cut -d ' ' -f 2)
@@ -32,6 +32,12 @@ else
   git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name\[*\]" --pretty=format:'%B' | sed "s/^$project_name/backend/g" >> $project_dir/doc/release.log.tmp
 fi
 cd $project_dir
+
+if [[ $(cat doc/release.log | grep "^--$version") ]]; then
+  sed -i "/^--$version/d" doc/release.log
+else
+  "\n" >> doc/release.log.tmp
+fi
 
 cat doc/release.log.tmp doc/release.log > doc/release.log.new
 rm doc/release.log.tmp && mv doc/release.log.new doc/release.log
