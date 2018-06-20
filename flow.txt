@@ -19,3 +19,7 @@
 1. 对于主工程，提取形如以$ACTION开头的message，$ACTION可以取值[+], [-], [!], [*]四种
 2. 由于所有的web工程都引入了6web作为submodule，为了区分6web内不同的module，需要保证6web的commit message符合$MODULE$ACTION XXX的形式，其中module必须需要跟tag.sh指定的module名称一致，例如trofi，$ACTION如1中所示
 
+[+] 表新增特性功能
+[-] 指删除特性或代码
+[!] 指修复bug
+[*] 指线上特性变更
