@@ -19,12 +19,18 @@ git log $latest_branch...$current_branch --grep "^[!]" --pretty=format:'%B' >> d
 git log $latest_branch...$current_branch --grep "^[*]" --pretty=format:'%B' >> doc/release.log.tmp
 
 cd ./6web
-6web_latest_branch=$(git tag | grep -Po "^$project_name-v\d+\.\d+\.\d+" | tail -1)
-6web_second_latest_branch=$(git tag | grep -Po "^$project_name-v\d+\.\d+\.\d+" | tail -2 | head -1)
-git log $6web_latest_branch...$6web_second_latest_branch --grep "^$project_name[+]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
-git log $6web_latest_branch...$6web_second_latest_branch --grep "^$project_name[-]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
-git log $6web_latest_branch...$6web_second_latest_branch --grep "^$project_name[!]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
-git log $6web_latest_branch...$6web_second_latest_branch --grep "^$project_name[*]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
+submodule_latest_branch=$(git tag | grep -Po "^$project_name-v\d+\.\d+\.\d+" | tail -1)
+submodule_second_latest_branch=$(git tag | grep -Po "^$project_name-v\d+\.\d+\.\d+" | tail -2 | head -1)
+echo $submodule_latest_branch
+echo $submodule_second_latest_branch
+if [[ -z "$submodule_latest_branch" ]] || [[ -z "$submodule_second_latest_branch" ]]; then
+  echo no proper tag found in 6web
+else
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[+]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[-]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[!]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
+  git log $submodule_latest_branch...$submodule_second_latest_branch --grep "^$project_name[*]" --pretty=format:'%B' >> $project_dir/doc/release.log.tmp
+fi
 cd $project_dir
 
 cat doc/release.log.tmp doc/release.log > doc/release.log.new
@@ -33,7 +39,13 @@ echo 'commit release.log'
 git stage doc/release.log
 git commit -m 'gen release.log'
 echo tag $version
-git tag $version
+existed_tag=$(git tag | grep $version)
+if [[ -z "existed_tag" ]]; then
+  git tag $version
+else
+  git push origin :refs/tags/$version
+  git tag -f $version
+fi
 git checkout master && git merge $current_branch
 git push
 git push --tags
