@@ -1,4 +1,15 @@
 --v1.2.0
+[+] update
+
+[+] update
+
+[+] fix duplicate version issue again
+
+[+] fix duplicate version issue in release.log
+Merge branch 'release-v1.2.0' into develop
+
+Merge branch 'release-v1.2.0' into develop
+--v1.2.0
 [+] fix grep bug
 
 --v1.1.0
